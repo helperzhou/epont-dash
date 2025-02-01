@@ -157,28 +157,53 @@ if chart_option == "Monthly Interventions Trends":
 # --- Pie Chart ---
 
 elif chart_option == "Intervention Category Distribution":
-    st.write("### 📊 Intervention Category Distribution")
+    st.write("### 📊 Intervention Category Distribution (Drilldown Enabled)")
 
-    pie_chart_config = {
+    # Prepare Drilldown Data
+    drilldown_data = {}
+    category_data = []
+
+    for category in df_interventions["Intervention_Category"].unique():
+        companies = df_interventions[df_interventions["Intervention_Category"] == category]["Company Name"].value_counts()
+
+        # Add category to main pie chart
+        category_data.append({
+            "name": category,
+            "y": companies.sum(),
+            "drilldown": category
+        })
+
+        # Add companies under each category for drill-down
+        drilldown_data[category] = [{"name": company, "y": count} for company, count in companies.items()]
+
+    # Highcharts Configuration for Drilldown
+    drilldown_pie_chart_config = {
         "chart": {"type": "pie"},
-        "title": {"text": "Intervention Categories"},
+        "title": {"text": "Intervention Categories (Click to View Companies)"},
+        "plotOptions": {"series": {"dataLabels": {"enabled": True}}},
         "series": [{
-            "name": "Count",
+            "name": "Categories",
             "colorByPoint": True,
-            "data": [
-                {"name": row["Intervention_Category"], "y": row["Count"]}
-                for _, row in category_counts.iterrows()
+            "data": category_data
+        }],
+        "drilldown": {
+            "series": [
+                {"name": category, "id": category, "data": drilldown_data[category]}
+                for category in drilldown_data
             ]
-        }]
+        }
     }
 
+    # Render Highcharts Drilldown Pie Chart in Streamlit
     st.components.v1.html(f"""
         <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/modules/drilldown.js"></script>
         <div id="pie_chart"></div>
         <script>
-        Highcharts.chart('pie_chart', {json.dumps(pie_chart_config)});
+        Highcharts.chart('pie_chart', {json.dumps(drilldown_pie_chart_config)});
         </script>
-    """, height=400)
+    """, height=500)
+
 
 # --- Bar Chart for Intervention Categories (Highcharts) ---
 elif chart_option == "Bar Chart":
