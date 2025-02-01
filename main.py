@@ -1,6 +1,10 @@
 import streamlit as st
 import pandas as pd
 import json
+import numpy as np
+import plotly.express as px
+import plotly.graph_objects as go
+import calendar
 
 st.set_page_config(
     page_title="Quantilytix-Epont ESD Programme",
@@ -35,14 +39,28 @@ if not st.session_state.logged_in:
     st.stop()
 
 # --- Load Dataset ---
-file_path = "Intervention_Database.xlsx"
+file_path = "Intervention_Database-1.xlsx"
 xls = pd.ExcelFile(file_path)
-df = xls.parse('Sheet1')
 
-# --- Streamlit UI ---
-st.title("Quantilytix-Epont ESD Programme")
+df_interventions = xls.parse('Interventions')
+df_quant = xls.parse('Quant')
 
-# --- Sidebar Filters with Logos ---
+# --- Fix Numeric Columns ---
+df_quant["Income"] = df_quant["Income"].astype(str).str.replace("R", "").str.replace(" ", "").astype(float)
+df_quant["Expenses"] = df_quant["Expenses"].astype(str).str.replace("R", "").str.replace(" ", "").astype(float)
+
+# --- Convert Month Names to Datetime (YYYY-MM) ---
+month_mapping = {month: str(index).zfill(2) for index, month in enumerate(calendar.month_name) if month}
+df_quant["Month"] = df_quant["Month"].map(month_mapping)
+
+# Assign the latest year (Assuming 2024)
+latest_year = 2024
+df_quant["Month"] = df_quant["Month"].apply(lambda x: f"{latest_year}-{x}" if pd.notna(x) else None)
+
+# Convert to datetime format
+df_quant["Month"] = pd.to_datetime(df_quant["Month"], format="%Y-%m")
+
+# --- Sidebar with Logos ---
 col1, col2 = st.sidebar.columns([1, 1])
 with col1:
     st.image("logo.png", width=100)  # Replace with your actual logo file
@@ -51,14 +69,13 @@ with col2:
 
 st.sidebar.header("Filters")
 
-# --- Sidebar Filters ---
-companies = ["All"] + df["Company Name"].unique().tolist()
-categories = ["All"] + df["Intervention_Category"].unique().tolist()
-genders = ["All"] + df["Gender"].unique().tolist()
-youth_options = ["All"] + df["Youth"].unique().tolist()
+companies = ["All"] + df_interventions["Company Name"].unique().tolist()
+categories_list = ["All"] + df_interventions["Intervention_Category"].unique().tolist()
+genders = ["All"] + df_interventions["Gender"].unique().tolist()
+youth_options = ["All"] + df_interventions["Youth"].unique().tolist()
 
 selected_company = st.sidebar.multiselect("Select Company", companies, default=["All"])
-selected_category = st.sidebar.multiselect("Select Category", categories, default=["All"])
+selected_category = st.sidebar.multiselect("Select Category", categories_list, default=["All"])
 selected_gender = st.sidebar.multiselect("Select Gender", genders, default=["All"])
 selected_youth = st.sidebar.radio("Show Youth", youth_options, index=0, horizontal=True)
 
@@ -68,7 +85,7 @@ if st.sidebar.button("Logout"):
     st.rerun()
 
 # --- Apply Filters ---
-filtered_df = df.copy()
+filtered_df = df_interventions.copy()
 
 if "All" not in selected_company:
     filtered_df = filtered_df[filtered_df["Company Name"].isin(selected_company)]
@@ -90,38 +107,53 @@ with st.expander("📊 View Filtered Data", expanded=False):
 st.write("### 📊 Select Chart to Display")
 chart_option = st.selectbox(
     "Choose a Chart Type",
-    ["Bar Chart", "Pie Chart", "Line Chart", "Box Plot"]
+    [
+        "Monthly Interventions Trends", "Bar Chart", "Intervention Category Distribution", "Box Plot", "Correlation Matrix",
+        "Employees", "Orders Received", "Transactions", "Income", "Expenses"
+    ]
 )
-
 # --- Chart Data Preparation ---
 category_counts = filtered_df["Intervention_Category"].value_counts().reset_index()
 category_counts.columns = ["Intervention_Category", "Count"]
 
-# --- Bar Chart ---
-if chart_option == "Bar Chart":
-    st.write("### 📊 Interventions by Category")
+if chart_option == "Monthly Interventions Trends":
+    st.write("### 📈 Monthly Intervention Trends (Filtered by Company)")
 
-    bar_chart_config = {
-        "chart": {"type": "bar"},
-        "title": {"text": "Intervention Categories"},
-        "xAxis": {"categories": category_counts["Intervention_Category"].tolist()},
+    # Apply Company Filter
+    if "All" not in selected_company:
+        df_interventions_filtered = df_interventions[df_interventions["Company Name"].isin(selected_company)]
+    else:
+        df_interventions_filtered = df_interventions.copy()
+
+    # Group by Month for Interventions
+    monthly_interventions_filtered = df_interventions_filtered.groupby(
+        pd.to_datetime(df_interventions_filtered["Date"]).dt.to_period("M")
+    ).size().reset_index(name="Count")
+
+    # Convert Month to String for Highcharts compatibility
+    monthly_interventions_filtered["Date"] = monthly_interventions_filtered["Date"].astype(str)
+
+    # Highcharts Configuration with Company Filter
+    filtered_line_chart_config = {
+        "chart": {"type": "spline"},
+        "title": {"text": "Monthly Interventions (Filtered by Company)"},
+        "xAxis": {"categories": monthly_interventions_filtered["Date"].tolist()},
         "yAxis": {"title": {"text": "Number of Interventions"}},
-        "series": [{
-            "name": "Interventions",
-            "data": category_counts["Count"].tolist()
-        }]
+        "series": [{"name": "Interventions", "data": monthly_interventions_filtered["Count"].tolist(), "color": "#2196F3"}]
     }
 
+    # Render Highcharts in Streamlit
     st.components.v1.html(f"""
         <script src="https://code.highcharts.com/highcharts.js"></script>
-        <div id="bar_chart"></div>
+        <div id="filtered_monthly_chart"></div>
         <script>
-        Highcharts.chart('bar_chart', {json.dumps(bar_chart_config)});
+        Highcharts.chart('filtered_monthly_chart', {json.dumps(filtered_line_chart_config)});
         </script>
     """, height=400)
 
 # --- Pie Chart ---
-elif chart_option == "Pie Chart":
+
+elif chart_option == "Intervention Category Distribution":
     st.write("### 📊 Intervention Category Distribution")
 
     pie_chart_config = {
@@ -145,67 +177,110 @@ elif chart_option == "Pie Chart":
         </script>
     """, height=400)
 
-# --- Line Chart ---
-elif chart_option == "Line Chart":
-    st.write("### 📈 Interventions Over Time")
+# --- Bar Chart for Intervention Categories (Highcharts) ---
+elif chart_option == "Bar Chart":
+    category_counts = filtered_df["Intervention_Category"].value_counts().reset_index()
+    category_counts.columns = ["Intervention_Category", "Count"]
 
-    time_series_data = filtered_df.groupby("Date").size().reset_index(name="Count")
-
-    line_chart_config = {
-        "chart": {"type": "line"},
-        "title": {"text": "Intervention Trends"},
-        "xAxis": {"categories": time_series_data["Date"].astype(str).tolist()},
+    bar_chart_config = {
+        "chart": {"type": "bar"},
+        "title": {"text": "Intervention Categories"},
+        "xAxis": {"categories": category_counts["Intervention_Category"].tolist()},
         "yAxis": {"title": {"text": "Number of Interventions"}},
-        "series": [{
-            "name": "Interventions",
-            "data": time_series_data["Count"].tolist()
-        }]
+        "series": [{"name": "Interventions", "data": category_counts["Count"].tolist(), "color": "#4CAF50"}]
     }
 
     st.components.v1.html(f"""
         <script src="https://code.highcharts.com/highcharts.js"></script>
-        <div id="line_chart"></div>
+        <div id="bar_chart"></div>
         <script>
-        Highcharts.chart('line_chart', {json.dumps(line_chart_config)});
+        Highcharts.chart('bar_chart', {json.dumps(bar_chart_config)});
         </script>
     """, height=400)
 
-# --- Highcharts Box Plot ---
+# --- Box Plot for Intervention Count Per Company (Plotly) ---
 elif chart_option == "Box Plot":
-    st.write("### 📦 Box Plot: Interventions Per Company")
+    st.write("### 📦 Intervention Count Distribution Per Company")
 
-    # Compute statistics for Box Plot
-    company_interventions = filtered_df.groupby("Company Name")["Intervention"].count().reset_index()
-    company_interventions.columns = ["Company", "Count"]
+    company_category_counts = df_interventions.groupby(["Company Name", "Intervention_Category"]).size().reset_index(name="Count")
 
-    box_plot_data = []
-    for company in company_interventions["Company"].unique():
-        company_data = company_interventions[company_interventions["Company"] == company]["Count"].tolist()
-        if len(company_data) > 0:
-            min_val = min(company_data)
-            q1 = company_interventions["Count"].quantile(0.25)
-            median = company_interventions["Count"].median()
-            q3 = company_interventions["Count"].quantile(0.75)
-            max_val = max(company_data)
+    if not company_category_counts.empty:
+        fig = px.box(
+            company_category_counts,
+            x="Company Name",
+            y="Count",
+            title="Intervention Count Distribution Per Company",
+            labels={"Count": "Number of Interventions Per Category"},
+            color="Company Name",
+            points=False
+        )
+        st.plotly_chart(fig, use_container_width=True)
+    else:
+        st.warning("Not enough data for a Box Plot. Try adjusting the filters.")
 
-            box_plot_data.append([min_val, q1, median, q3, max_val])
-
-    box_plot_config = {
-        "chart": {"type": "boxplot"},
-        "title": {"text": "Intervention Count Distribution Per Company"},
-        "xAxis": {"categories": company_interventions["Company"].tolist(), "title": {"text": "Companies"}},
-        "yAxis": {"title": {"text": "Number of Interventions"}},
-        "series": [{
-            "name": "Interventions",
-            "data": box_plot_data
-        }]
+# --- Business Metrics Graphs (Highcharts) ---
+elif chart_option in ["Employees", "Orders Received", "Transactions", "Income", "Expenses"]:
+    quant_metrics = {
+        "Employees": "Empoyees",
+        "Orders Received": "Orders_Received",
+        "Transactions": "Transactions_Recorded",
+        "Income": "Income",
+        "Expenses": "Expenses",
     }
+
+    df_quant_grouped = df_quant.groupby("Name")[quant_metrics[chart_option]].sum().reset_index()
 
     st.components.v1.html(f"""
         <script src="https://code.highcharts.com/highcharts.js"></script>
-        <script src="https://code.highcharts.com/modules/boxplot.js"></script>
-        <div id="box_plot"></div>
+        <div id="{chart_option.lower().replace(' ', '_')}_chart"></div>
         <script>
-        Highcharts.chart('box_plot', {json.dumps(box_plot_config)});
+        Highcharts.chart('{chart_option.lower().replace(' ', '_')}_chart', {json.dumps({"chart": {"type": "column"}, "title": {"text": f"{chart_option} Per Company"}, "xAxis": {"categories": df_quant_grouped["Name"].tolist()}, "yAxis": {"title": {"text": f"Total {chart_option}"}}, "series": [{"name": chart_option, "data": df_quant_grouped[quant_metrics[chart_option]].tolist(), "color": "#4CAF50"}]})});
         </script>
     """, height=400)
+
+elif chart_option == "Correlation Matrix":
+    st.write("### 🔬 Correlation: Interventions & Revenue (Filtered)")
+
+    # Apply filters to df_interventions and df_quant
+    filtered_correlation_df = df_interventions.copy()
+
+    if "All" not in selected_company:
+        filtered_correlation_df = filtered_correlation_df[filtered_correlation_df["Company Name"].isin(selected_company)]
+
+    # Aggregate intervention count per company after filtering
+    df_correlation = filtered_correlation_df.groupby("Company Name").size().reset_index(name="Intervention_Count")
+
+    # Merge with revenue data
+    df_correlation = df_correlation.merge(df_quant[["Name", "Income"]], left_on="Company Name", right_on="Name", how="inner")
+    df_correlation.drop(columns=["Name"], inplace=True)  # Remove duplicate company column
+
+    # Ensure enough data for correlation
+    if df_correlation.shape[0] > 1:
+        # Compute correlation matrix
+        correlation_matrix = df_correlation.select_dtypes(include=["number"]).corr()
+
+        # Convert to Plotly Heatmap format
+        fig = go.Figure(
+            data=go.Heatmap(
+                z=correlation_matrix.values,
+                x=correlation_matrix.columns,
+                y=correlation_matrix.index,
+                colorscale="RdBu",
+                zmin=-1,
+                zmax=1,
+                text=correlation_matrix.values,
+                hoverinfo="text",
+            )
+        )
+        fig.update_layout(
+            title="Correlation Matrix: Interventions & Revenue (Filtered)",
+            xaxis_title="Metrics",
+            yaxis_title="Metrics",
+            width=700,
+            height=500
+        )
+
+        # Display in Streamlit
+        st.plotly_chart(fig, use_container_width=True)
+    else:
+        st.warning("Not enough data to compute a correlation matrix. Try selecting more companies.")
