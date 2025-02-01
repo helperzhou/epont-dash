@@ -80,7 +80,7 @@ st.write("### 📊 Select Chart to Display")
 chart_option = st.selectbox(
     "Choose a Chart Type",
     [
-        "Box Plot", "Monthly Interventions Trends", "Bar Chart", "Intervention Category Distribution",
+        "Box Plot", "Monthly Interventions Trends", "Intervention Categories", "Intervention Category Distribution",
         "Employees", "Orders Received", "Transactions", "Income", "Expenses"
     ]
 )
@@ -185,8 +185,8 @@ elif chart_option == "Intervention Category Distribution":
         </script>
     """, height=500)
 
-elif chart_option == "Bar Chart":
-    st.write("### 📊 Intervention Categories (All Companies)")
+elif chart_option == "Intervention Categories":
+    st.write("### 📊 Intervention Categories")
 
     # Group by Company and Intervention Category
     company_category_counts = df_interventions.groupby(["Company Name", "Intervention_Category"]).size().reset_index(name="Count")
