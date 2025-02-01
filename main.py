@@ -289,9 +289,9 @@ elif chart_option == "Box Plot":
 elif chart_option in ["Employees", "Orders Received", "Transactions", "Income", "Expenses"]:
     st.write(f"### 📈 {chart_option} Over Time")
 
-    # Corrected dictionary with proper column names
+    # Correct dictionary with actual column names
     quant_metrics = {
-        "Employees": "Employees",
+        "Employees": "Empoyees",
         "Orders Received": "Orders_Received",
         "Transactions": "Transactions_Recorded",
         "Income": "Income",
@@ -301,27 +301,27 @@ elif chart_option in ["Employees", "Orders Received", "Transactions", "Income", 
     # Ensure datetime format
     df_quant["Month"] = pd.to_datetime(df_quant["Month"])
 
-    # Grouping by Date for Trends
-    df_quant_time_series = df_quant.groupby("Month")[quant_metrics[chart_option]].sum().reset_index()
+    # **Group by BOTH "Month" and "Name"**
+    df_quant_time_series = df_quant.groupby(["Month", "Name"])[quant_metrics[chart_option]].sum().reset_index()
 
-    # Convert to Highcharts JSON serializable format
+    # Convert column values to JSON serializable types
     df_quant_time_series[quant_metrics[chart_option]] = df_quant_time_series[quant_metrics[chart_option]].astype(float)
 
-    # Define unique colors for each metric
-    metric_colors = {
-        "Employees": "#FF5733",  # Orange
-        "Orders Received": "#3498DB",  # Blue
-        "Transactions": "#9B59B6",  # Purple
-        "Income": "#27AE60",  # Green
-        "Expenses": "#E74C3C",  # Red
-    }
+    # Generate a series for each company
+    series_data = []
+    for company in df_quant_time_series["Name"].unique():
+        company_data = df_quant_time_series[df_quant_time_series["Name"] == company]
+        series_data.append({
+            "name": company,
+            "data": company_data[quant_metrics[chart_option]].tolist()
+        })
 
-    # Highcharts Configuration for Line Graphs
+    # Highcharts Configuration
     line_chart_config = {
         "chart": {"type": "spline", "backgroundColor": "#1c1c1c"},
         "title": {"text": f"{chart_option} Trends Over Time", "style": {"color": "#ffffff"}},
         "xAxis": {
-            "categories": df_quant_time_series["Month"].dt.strftime("%Y-%m").tolist(),
+            "categories": df_quant_time_series["Month"].dt.strftime("%Y-%m").unique().tolist(),
             "title": {"text": "Month"},
             "labels": {"style": {"color": "#ffffff"}}
         },
@@ -329,12 +329,8 @@ elif chart_option in ["Employees", "Orders Received", "Transactions", "Income", 
             "title": {"text": f"Total {chart_option}"},
             "labels": {"style": {"color": "#ffffff"}}
         },
-        "legend": {"enabled": False},  # No need for a legend since it's a single series
-        "series": [{
-            "name": chart_option,
-            "data": df_quant_time_series[quant_metrics[chart_option]].tolist(),
-            "color": metric_colors[chart_option]  # Set unique color
-        }]
+        "legend": {"enabled": True},  # Show legend for multiple companies
+        "series": series_data  # Use the dynamically generated company series
     }
 
     # Render Highcharts Line Graph in Streamlit
@@ -345,7 +341,6 @@ elif chart_option in ["Employees", "Orders Received", "Transactions", "Income", 
         Highcharts.chart('{chart_option.lower().replace(' ', '_')}_chart', {json.dumps(line_chart_config)});
         </script>
     """, height=500)
-
 
 elif chart_option == "Correlation Matrix":
     st.write("### 🔬 Correlation: Interventions & Revenue (Filtered)")
