@@ -241,11 +241,11 @@ elif chart_option == "Bar Chart":
         "xAxis": {
             "categories": category_list,
             "title": {"text": "Intervention Categories"},
-            "labels": {"style": {"color": "#ffffff"}}
+            "labels": {"style": {"color": "#000"}}
         },
         "yAxis": {
             "title": {"text": "Number of Interventions"},
-            "labels": {"style": {"color": "#ffffff"}}
+            "labels": {"style": {"color": "#000"}}
         },
         "legend": {"enabled": True},
         "plotOptions": {
