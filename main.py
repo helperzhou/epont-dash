@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 import calendar
 
 st.set_page_config(
-    page_title="Quantilytix-Epont ESD Programme",
+    page_title="Quantilytix-Epont Platform",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -67,17 +67,7 @@ with col1:
 with col2:
     st.image("epnt.png", width=100)  # Replace with your actual logo file
 
-st.sidebar.header("Filters")
-
-companies = ["All"] + df_interventions["Company Name"].unique().tolist()
-categories_list = ["All"] + df_interventions["Intervention_Category"].unique().tolist()
-genders = ["All"] + df_interventions["Gender"].unique().tolist()
-youth_options = ["All"] + df_interventions["Youth"].unique().tolist()
-
-selected_company = st.sidebar.multiselect("Select Company", companies, default=["All"])
-selected_category = st.sidebar.multiselect("Select Category", categories_list, default=["All"])
-selected_gender = st.sidebar.multiselect("Select Gender", genders, default=["All"])
-selected_youth = st.sidebar.radio("Show Youth", youth_options, index=0, horizontal=True)
+st.sidebar.header("Quantilytix-Epont Platform")
 
 # --- Logout Button ---
 if st.sidebar.button("Logout"):
@@ -99,9 +89,7 @@ if "All" not in selected_gender:
 if selected_youth != "All":
     filtered_df = filtered_df[filtered_df["Youth"] == selected_youth]
 
-# --- Collapsible Filtered Data Table ---
-with st.expander("📊 View Filtered Data", expanded=False):
-    st.dataframe(filtered_df)
+
 
 # --- Chart Selection ---
 st.write("### 📊 Select Chart to Display")
