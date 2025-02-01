@@ -178,7 +178,16 @@ elif chart_option == "Intervention Category Distribution":
     # Highcharts Configuration for Drilldown
     drilldown_pie_chart_config = {
         "chart": {"type": "pie"},
-        "plotOptions": {"series": {"dataLabels": {"enabled": True}}},
+        # "plotOptions": {"series": {"dataLabels": {"enabled": True}}},
+        "plotOptions": {
+            "pie": {
+                "dataLabels": {
+                    "enabled": True,
+                    "format": "{point.name}: {point.y}",  # Show Name and Count
+                    "style": {"color": "#ffffff"}
+                }
+            }
+        },
          "title": {"text": ""},
         "series": [{
             "name": "Categories",
@@ -205,24 +214,53 @@ elif chart_option == "Intervention Category Distribution":
 
 # --- Bar Chart for Intervention Categories (Highcharts) ---
 elif chart_option == "Bar Chart":
-    category_counts = filtered_df["Intervention_Category"].value_counts().reset_index()
-    category_counts.columns = ["Intervention_Category", "Count"]
+    st.write("### 📊 Intervention Categories (All Companies)")
 
-    bar_chart_config = {
-        "chart": {"type": "bar"},
-        "title": {"text": "Intervention Categories"},
-        "xAxis": {"categories": category_counts["Intervention_Category"].tolist()},
-        "yAxis": {"title": {"text": "Number of Interventions"}},
-        "series": [{"name": "Interventions", "data": category_counts["Count"].tolist(), "color": "#4CAF50"}]
+    # Group by Company and Intervention Category
+    company_category_counts = df_interventions.groupby(["Company Name", "Intervention_Category"]).size().reset_index(name="Count")
+
+    # Pivot Data for Highcharts Format
+    category_list = company_category_counts["Intervention_Category"].unique().tolist()
+    company_list = company_category_counts["Company Name"].unique().tolist()
+
+    # Prepare Data for Highcharts
+    series_data = []
+    for company in company_list:
+        company_data = company_category_counts[company_category_counts["Company Name"] == company]
+        series_data.append({
+            "name": company,
+            "data": [company_data[company_data["Intervention_Category"] == category]["Count"].sum() if category in company_data["Intervention_Category"].values else 0 for category in category_list]
+        })
+
+    # Highcharts Configuration
+    multi_company_bar_chart_config = {
+        "chart": {"type": "bar", "backgroundColor": "#1c1c1c"},
+        "title": {"text": "Intervention Categories by Company", "style": {"color": "#ffffff"}},
+        "xAxis": {
+            "categories": category_list,
+            "title": {"text": "Intervention Categories"},
+            "labels": {"style": {"color": "#ffffff"}}
+        },
+        "yAxis": {
+            "title": {"text": "Number of Interventions"},
+            "labels": {"style": {"color": "#ffffff"}}
+        },
+        "legend": {"enabled": True},
+        "plotOptions": {
+            "series": {"stacking": "normal"}  # Stacked Bar Chart
+        },
+        "series": series_data
     }
 
+    # Render Highcharts Bar Chart in Streamlit
     st.components.v1.html(f"""
         <script src="https://code.highcharts.com/highcharts.js"></script>
-        <div id="bar_chart"></div>
+        <div id="multi_company_bar_chart"></div>
         <script>
-        Highcharts.chart('bar_chart', {json.dumps(bar_chart_config)});
+        Highcharts.chart('multi_company_bar_chart', {json.dumps(multi_company_bar_chart_config)});
         </script>
-    """, height=400)
+    """, height=500)
+
 
 # --- Box Plot for Intervention Count Per Company (Plotly) ---
 elif chart_option == "Box Plot":
