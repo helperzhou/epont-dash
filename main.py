@@ -117,39 +117,42 @@ category_counts = filtered_df["Intervention_Category"].value_counts().reset_inde
 category_counts.columns = ["Intervention_Category", "Count"]
 
 if chart_option == "Monthly Interventions Trends":
-    st.write("### 📈 Monthly Intervention Trends (Filtered by Company)")
+    st.write("### 📈 Monthly Intervention Trends")
 
-    # Apply Company Filter
-    if "All" not in selected_company:
-        df_interventions_filtered = df_interventions[df_interventions["Company Name"].isin(selected_company)]
-    else:
-        df_interventions_filtered = df_interventions.copy()
+    # Convert Date to Period (Monthly)
+    df_interventions["Month"] = pd.to_datetime(df_interventions["Date"]).dt.to_period("M").astype(str)
 
-    # Group by Month for Interventions
-    monthly_interventions_filtered = df_interventions_filtered.groupby(
-        pd.to_datetime(df_interventions_filtered["Date"]).dt.to_period("M")
-    ).size().reset_index(name="Count")
+    # Group by Company and Month
+    company_monthly_data = df_interventions.groupby(["Company Name", "Month"]).size().reset_index(name="Count")
 
-    # Convert Month to String for Highcharts compatibility
-    monthly_interventions_filtered["Date"] = monthly_interventions_filtered["Date"].astype(str)
+    # Prepare series for Highcharts
+    series_data = []
+    for company in company_monthly_data["Company Name"].unique():
+        company_data = company_monthly_data[company_monthly_data["Company Name"] == company]
+        series_data.append({
+            "name": company,
+            "data": company_data["Count"].tolist()
+        })
 
-    # Highcharts Configuration with Company Filter
-    filtered_line_chart_config = {
+    # Highcharts Configuration
+    multi_company_chart_config = {
         "chart": {"type": "spline"},
-        "title": {"text": "Monthly Interventions (Filtered by Company)"},
-        "xAxis": {"categories": monthly_interventions_filtered["Date"].tolist()},
+        "title": {"text": "Monthly Interventions Trends (All Companies)"},
+        "xAxis": {"categories": sorted(company_monthly_data["Month"].unique()), "title": {"text": "Month"}},
         "yAxis": {"title": {"text": "Number of Interventions"}},
-        "series": [{"name": "Interventions", "data": monthly_interventions_filtered["Count"].tolist(), "color": "#2196F3"}]
+        "legend": {"enabled": True},
+        "series": series_data
     }
 
     # Render Highcharts in Streamlit
     st.components.v1.html(f"""
         <script src="https://code.highcharts.com/highcharts.js"></script>
-        <div id="filtered_monthly_chart"></div>
+        <div id="multi_company_chart"></div>
         <script>
-        Highcharts.chart('filtered_monthly_chart', {json.dumps(filtered_line_chart_config)});
+        Highcharts.chart('multi_company_chart', {json.dumps(multi_company_chart_config)});
         </script>
-    """, height=400)
+    """, height=500)
+
 
 # --- Pie Chart ---
 
