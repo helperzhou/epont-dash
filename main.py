@@ -80,7 +80,7 @@ st.write("### 📊 Select Chart to Display")
 chart_option = st.selectbox(
     "Choose a Chart Type",
     [
-        "Box Plot", "Monthly Interventions Trends", "Bar Chart", "Intervention Category Distribution",  "Correlation Matrix",
+        "Box Plot", "Monthly Interventions Trends", "Bar Chart", "Intervention Category Distribution",
         "Employees", "Orders Received", "Transactions", "Income", "Expenses"
     ]
 )
@@ -313,50 +313,3 @@ elif chart_option in ["Employees", "Orders Received", "Transactions", "Income", 
         Highcharts.chart('{chart_option.lower().replace(' ', '_')}_chart', {json.dumps(line_chart_config)});
         </script>
     """, height=500)
-
-elif chart_option == "Correlation Matrix":
-    st.write("### 🔬 Correlation: Interventions & Revenue (Filtered)")
-
-    # Apply filters to df_interventions and df_quant
-    filtered_correlation_df = df_interventions.copy()
-
-    if "All" not in selected_company:
-        filtered_correlation_df = filtered_correlation_df[filtered_correlation_df["Company Name"].isin(selected_company)]
-
-    # Aggregate intervention count per company after filtering
-    df_correlation = filtered_correlation_df.groupby("Company Name").size().reset_index(name="Intervention_Count")
-
-    # Merge with revenue data
-    df_correlation = df_correlation.merge(df_quant[["Name", "Income"]], left_on="Company Name", right_on="Name", how="inner")
-    df_correlation.drop(columns=["Name"], inplace=True)  # Remove duplicate company column
-
-    # Ensure enough data for correlation
-    if df_correlation.shape[0] > 1:
-        # Compute correlation matrix
-        correlation_matrix = df_correlation.select_dtypes(include=["number"]).corr()
-
-        # Convert to Plotly Heatmap format
-        fig = go.Figure(
-            data=go.Heatmap(
-                z=correlation_matrix.values,
-                x=correlation_matrix.columns,
-                y=correlation_matrix.index,
-                colorscale="RdBu",
-                zmin=-1,
-                zmax=1,
-                text=correlation_matrix.values,
-                hoverinfo="text",
-            )
-        )
-        fig.update_layout(
-            title="Correlation Matrix: Interventions & Revenue (Filtered)",
-            xaxis_title="Metrics",
-            yaxis_title="Metrics",
-            width=700,
-            height=500
-        )
-
-        # Display in Streamlit
-        st.plotly_chart(fig, use_container_width=True)
-    else:
-        st.warning("Not enough data to compute a correlation matrix. Try selecting more companies.")
