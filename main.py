@@ -318,16 +318,16 @@ elif chart_option in ["Employees", "Orders Received", "Transactions", "Income", 
 
     # Highcharts Configuration
     line_chart_config = {
-        "chart": {"type": "spline", "backgroundColor": "#1c1c1c"},
-        "title": {"text": f"{chart_option} Trends Over Time", "style": {"color": "#ffffff"}},
+        "chart": {"type": "spline"},
+        "title": {"text": f"{chart_option} Trends Over Time", "style": {"color": "#00"}},
         "xAxis": {
             "categories": df_quant_time_series["Month"].dt.strftime("%Y-%m").unique().tolist(),
             "title": {"text": "Month"},
-            "labels": {"style": {"color": "#ffffff"}}
+            "labels": {"style": {"color": "#000"}}
         },
         "yAxis": {
             "title": {"text": f"Total {chart_option}"},
-            "labels": {"style": {"color": "#ffffff"}}
+            "labels": {"style": {"color": "#000"}}
         },
         "legend": {"enabled": True},  # Show legend for multiple companies
         "series": series_data  # Use the dynamically generated company series
