@@ -179,6 +179,7 @@ elif chart_option == "Intervention Category Distribution":
     drilldown_pie_chart_config = {
         "chart": {"type": "pie"},
         "plotOptions": {"series": {"dataLabels": {"enabled": True}}},
+         "title": {"text": ""},
         "series": [{
             "name": "Categories",
             "colorByPoint": True,
