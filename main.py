@@ -74,22 +74,6 @@ if st.sidebar.button("Logout"):
     st.session_state.logged_in = False
     st.rerun()
 
-# --- Apply Filters ---
-filtered_df = df_interventions.copy()
-
-if "All" not in selected_company:
-    filtered_df = filtered_df[filtered_df["Company Name"].isin(selected_company)]
-
-if "All" not in selected_category:
-    filtered_df = filtered_df[filtered_df["Intervention_Category"].isin(selected_category)]
-
-if "All" not in selected_gender:
-    filtered_df = filtered_df[filtered_df["Gender"].isin(selected_gender)]
-
-if selected_youth != "All":
-    filtered_df = filtered_df[filtered_df["Youth"] == selected_youth]
-
-
 
 # --- Chart Selection ---
 st.write("### 📊 Select Chart to Display")
@@ -101,7 +85,7 @@ chart_option = st.selectbox(
     ]
 )
 # --- Chart Data Preparation ---
-category_counts = filtered_df["Intervention_Category"].value_counts().reset_index()
+category_counts = df_interventions["Intervention_Category"].value_counts().reset_index()
 category_counts.columns = ["Intervention_Category", "Count"]
 
 if chart_option == "Monthly Interventions Trends":
