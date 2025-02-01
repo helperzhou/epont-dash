@@ -178,7 +178,6 @@ elif chart_option == "Intervention Category Distribution":
     # Highcharts Configuration for Drilldown
     drilldown_pie_chart_config = {
         "chart": {"type": "pie"},
-        "title": {"text": "Intervention Categories (Click to View Companies)", "style": {"color": "#ffffff"}},
         "plotOptions": {"series": {"dataLabels": {"enabled": True}}},
         "series": [{
             "name": "Categories",
@@ -197,7 +196,6 @@ elif chart_option == "Intervention Category Distribution":
     st.components.v1.html(f"""
         <script src="https://code.highcharts.com/highcharts.js"></script>
         <script src="https://code.highcharts.com/modules/drilldown.js"></script>
-        <script src="https://code.highcharts.com/themes/dark-unica.js"></script>  <!-- Dark Theme -->
         <div id="pie_chart"></div>
         <script>
         Highcharts.chart('pie_chart', {json.dumps(drilldown_pie_chart_config)});
