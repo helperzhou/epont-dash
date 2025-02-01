@@ -180,6 +180,7 @@ elif chart_option == "Intervention Category Distribution":
         "chart": {"type": "pie"},
         # "plotOptions": {"series": {"dataLabels": {"enabled": True}}},
         "plotOptions": {
+            "series": {"dataLabels": {"enabled": True}},
             "pie": {
                 "dataLabels": {
                     "enabled": True,
@@ -212,7 +213,6 @@ elif chart_option == "Intervention Category Distribution":
         </script>
     """, height=500)
 
-# --- Bar Chart for Intervention Categories (Highcharts) ---
 elif chart_option == "Bar Chart":
     st.write("### 📊 Intervention Categories (All Companies)")
 
@@ -223,13 +223,15 @@ elif chart_option == "Bar Chart":
     category_list = company_category_counts["Intervention_Category"].unique().tolist()
     company_list = company_category_counts["Company Name"].unique().tolist()
 
-    # Prepare Data for Highcharts
+    # Prepare Data for Highcharts (Convert int64 to int)
     series_data = []
     for company in company_list:
         company_data = company_category_counts[company_category_counts["Company Name"] == company]
         series_data.append({
             "name": company,
-            "data": [company_data[company_data["Intervention_Category"] == category]["Count"].sum() if category in company_data["Intervention_Category"].values else 0 for category in category_list]
+            "data": [int(company_data[company_data["Intervention_Category"] == category]["Count"].sum()) 
+                     if category in company_data["Intervention_Category"].values else 0
+                     for category in category_list]  # Convert int64 to int
         })
 
     # Highcharts Configuration
@@ -260,6 +262,7 @@ elif chart_option == "Bar Chart":
         Highcharts.chart('multi_company_bar_chart', {json.dumps(multi_company_bar_chart_config)});
         </script>
     """, height=500)
+
 
 
 # --- Box Plot for Intervention Count Per Company (Plotly) ---
