@@ -109,7 +109,7 @@ if chart_option == "Monthly Interventions Trends":
     # Highcharts Configuration
     multi_company_chart_config = {
         "chart": {"type": "spline"},
-        "title": {"text": "Monthly Interventions Trends (All Companies)"},
+        "title": {"text": "Monthly Interventions Trends"},
         "xAxis": {"categories": sorted(company_monthly_data["Month"].unique()), "title": {"text": "Month"}},
         "yAxis": {"title": {"text": "Number of Interventions"}},
         "legend": {"enabled": True},
