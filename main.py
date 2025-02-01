@@ -236,8 +236,8 @@ elif chart_option == "Bar Chart":
 
     # Highcharts Configuration
     multi_company_bar_chart_config = {
-        "chart": {"type": "bar", "backgroundColor": "#1c1c1c"},
-        "title": {"text": "Intervention Categories by Company", "style": {"color": "#ffffff"}},
+        "chart": {"type": "bar"},
+        "title": {"text": "Intervention Categories by Company"},
         "xAxis": {
             "categories": category_list,
             "title": {"text": "Intervention Categories"},
