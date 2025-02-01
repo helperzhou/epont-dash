@@ -108,7 +108,7 @@ st.write("### 📊 Select Chart to Display")
 chart_option = st.selectbox(
     "Choose a Chart Type",
     [
-        "Monthly Interventions Trends", "Bar Chart", "Intervention Category Distribution", "Box Plot", "Correlation Matrix",
+        "Box Plot", "Monthly Interventions Trends", "Bar Chart", "Intervention Category Distribution",  "Correlation Matrix",
         "Employees", "Orders Received", "Transactions", "Income", "Expenses"
     ]
 )
