@@ -155,7 +155,6 @@ if chart_option == "Monthly Interventions Trends":
 
 
 # --- Pie Chart ---
-
 elif chart_option == "Intervention Category Distribution":
     st.write("### 📊 Intervention Category Distribution") 
 
@@ -178,7 +177,7 @@ elif chart_option == "Intervention Category Distribution":
 
     # Highcharts Configuration for Drilldown
     drilldown_pie_chart_config = {
-        "chart": {"type": "pie", "backgroundColor": "#1c1c1c"},  # Dark Theme
+        "chart": {"type": "pie"},
         "title": {"text": "Intervention Categories (Click to View Companies)", "style": {"color": "#ffffff"}},
         "plotOptions": {"series": {"dataLabels": {"enabled": True}}},
         "series": [{
