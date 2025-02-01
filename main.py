@@ -157,7 +157,7 @@ if chart_option == "Monthly Interventions Trends":
 # --- Pie Chart ---
 
 elif chart_option == "Intervention Category Distribution":
-    st.write("### 📊 Intervention Category Distribution (Drilldown Enabled)")
+    st.write("### 📊 Intervention Category Distribution") 
 
     # Prepare Drilldown Data
     drilldown_data = {}
@@ -166,20 +166,20 @@ elif chart_option == "Intervention Category Distribution":
     for category in df_interventions["Intervention_Category"].unique():
         companies = df_interventions[df_interventions["Intervention_Category"] == category]["Company Name"].value_counts()
 
-        # Add category to main pie chart
+        # Add category to main pie chart (Convert int64 to int)
         category_data.append({
             "name": category,
-            "y": companies.sum(),
+            "y": int(companies.sum()),  # Convert int64 to int
             "drilldown": category
         })
 
-        # Add companies under each category for drill-down
-        drilldown_data[category] = [{"name": company, "y": count} for company, count in companies.items()]
+        # Add companies under each category for drill-down (Convert int64 to int)
+        drilldown_data[category] = [{"name": company, "y": int(count)} for company, count in companies.items()]
 
     # Highcharts Configuration for Drilldown
     drilldown_pie_chart_config = {
-        "chart": {"type": "pie"},
-        "title": {"text": "Intervention Categories (Click to View Companies)"},
+        "chart": {"type": "pie", "backgroundColor": "#1c1c1c"},  # Dark Theme
+        "title": {"text": "Intervention Categories (Click to View Companies)", "style": {"color": "#ffffff"}},
         "plotOptions": {"series": {"dataLabels": {"enabled": True}}},
         "series": [{
             "name": "Categories",
@@ -198,12 +198,12 @@ elif chart_option == "Intervention Category Distribution":
     st.components.v1.html(f"""
         <script src="https://code.highcharts.com/highcharts.js"></script>
         <script src="https://code.highcharts.com/modules/drilldown.js"></script>
+        <script src="https://code.highcharts.com/themes/dark-unica.js"></script>  <!-- Dark Theme -->
         <div id="pie_chart"></div>
         <script>
         Highcharts.chart('pie_chart', {json.dumps(drilldown_pie_chart_config)});
         </script>
     """, height=500)
-
 
 # --- Bar Chart for Intervention Categories (Highcharts) ---
 elif chart_option == "Bar Chart":
