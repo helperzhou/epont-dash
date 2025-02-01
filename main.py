@@ -284,26 +284,68 @@ elif chart_option == "Box Plot":
         st.plotly_chart(fig, use_container_width=True)
     else:
         st.warning("Not enough data for a Box Plot. Try adjusting the filters.")
+        
 
-# --- Business Metrics Graphs (Highcharts) ---
 elif chart_option in ["Employees", "Orders Received", "Transactions", "Income", "Expenses"]:
+    st.write(f"### 📈 {chart_option} Over Time")
+
+    # Corrected dictionary with proper column names
     quant_metrics = {
-        "Employees": "Empoyees",
+        "Employees": "Employees",
         "Orders Received": "Orders_Received",
         "Transactions": "Transactions_Recorded",
         "Income": "Income",
         "Expenses": "Expenses",
     }
 
-    df_quant_grouped = df_quant.groupby("Name")[quant_metrics[chart_option]].sum().reset_index()
+    # Ensure datetime format
+    df_quant["Month"] = pd.to_datetime(df_quant["Month"])
 
+    # Grouping by Date for Trends
+    df_quant_time_series = df_quant.groupby("Month")[quant_metrics[chart_option]].sum().reset_index()
+
+    # Convert to Highcharts JSON serializable format
+    df_quant_time_series[quant_metrics[chart_option]] = df_quant_time_series[quant_metrics[chart_option]].astype(float)
+
+    # Define unique colors for each metric
+    metric_colors = {
+        "Employees": "#FF5733",  # Orange
+        "Orders Received": "#3498DB",  # Blue
+        "Transactions": "#9B59B6",  # Purple
+        "Income": "#27AE60",  # Green
+        "Expenses": "#E74C3C",  # Red
+    }
+
+    # Highcharts Configuration for Line Graphs
+    line_chart_config = {
+        "chart": {"type": "spline", "backgroundColor": "#1c1c1c"},
+        "title": {"text": f"{chart_option} Trends Over Time", "style": {"color": "#ffffff"}},
+        "xAxis": {
+            "categories": df_quant_time_series["Month"].dt.strftime("%Y-%m").tolist(),
+            "title": {"text": "Month"},
+            "labels": {"style": {"color": "#ffffff"}}
+        },
+        "yAxis": {
+            "title": {"text": f"Total {chart_option}"},
+            "labels": {"style": {"color": "#ffffff"}}
+        },
+        "legend": {"enabled": False},  # No need for a legend since it's a single series
+        "series": [{
+            "name": chart_option,
+            "data": df_quant_time_series[quant_metrics[chart_option]].tolist(),
+            "color": metric_colors[chart_option]  # Set unique color
+        }]
+    }
+
+    # Render Highcharts Line Graph in Streamlit
     st.components.v1.html(f"""
         <script src="https://code.highcharts.com/highcharts.js"></script>
         <div id="{chart_option.lower().replace(' ', '_')}_chart"></div>
         <script>
-        Highcharts.chart('{chart_option.lower().replace(' ', '_')}_chart', {json.dumps({"chart": {"type": "column"}, "title": {"text": f"{chart_option} Per Company"}, "xAxis": {"categories": df_quant_grouped["Name"].tolist()}, "yAxis": {"title": {"text": f"Total {chart_option}"}}, "series": [{"name": chart_option, "data": df_quant_grouped[quant_metrics[chart_option]].tolist(), "color": "#4CAF50"}]})});
+        Highcharts.chart('{chart_option.lower().replace(' ', '_')}_chart', {json.dumps(line_chart_config)});
         </script>
-    """, height=400)
+    """, height=500)
+
 
 elif chart_option == "Correlation Matrix":
     st.write("### 🔬 Correlation: Interventions & Revenue (Filtered)")
