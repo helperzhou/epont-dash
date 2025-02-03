@@ -1,0 +1,377 @@
+2025-02-03 01:27:21 [INFO] Question: hey
+2025-02-03 01:27:22 [INFO] Running PandasAI with google-gemini LLM...
+2025-02-03 01:27:22 [INFO] Prompt ID: 2a419331-7942-4f68-a1d6-533619b9e22c
+2025-02-03 01:27:22 [INFO] Executing Pipeline: GenerateChatPipeline
+2025-02-03 01:27:22 [INFO] Executing Step 0: ValidatePipelineInput
+2025-02-03 01:27:22 [INFO] Executing Step 1: CacheLookup
+2025-02-03 01:27:22 [INFO] Executing Step 2: PromptGeneration
+2025-02-03 01:27:22 [INFO] Using prompt: <dataframe>
+dfs[0]:174x7
+Company Name,Gender,Youth,Intervention_Category,Intervention,Comments,Date
+OM Coteries,Male,No,Mentorship and Coaching,Growth Plan Presenation,Tax training for SMMEs by Bond,2025-01-28
+Nqoba Legacy,Female,Yes,Marketing Support,ESD Contracts,Digital Marketing by Nhlalo during phygital session,2024-12-03
+Jamlea,Female,No,Admin ,One on One mentorship,,2024-09-23
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ hey
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+2025-02-03 01:27:22 [INFO] Executing Step 3: CodeGenerator
+2025-02-03 01:27:24 [ERROR] Pipeline failed on step 3: 400 API Key not found. Please pass a valid API key. [reason: "API_KEY_INVALID"
+domain: "googleapis.com"
+metadata {
+  key: "service"
+  value: "generativelanguage.googleapis.com"
+}
+, locale: "en-US"
+message: "API Key not found. Please pass a valid API key."
+]
+2025-02-03 01:44:09 [INFO] Question: Show the first 5 rows of data in tabular form
+2025-02-03 01:44:09 [INFO] Running PandasAI with google-gemini LLM...
+2025-02-03 01:44:09 [INFO] Prompt ID: 4422a4b7-f8d8-4a91-9329-b84540983c0b
+2025-02-03 01:44:09 [INFO] Executing Pipeline: GenerateChatPipeline
+2025-02-03 01:44:09 [INFO] Executing Step 0: ValidatePipelineInput
+2025-02-03 01:44:09 [INFO] Executing Step 1: CacheLookup
+2025-02-03 01:44:09 [INFO] Executing Step 2: PromptGeneration
+2025-02-03 01:44:09 [INFO] Using prompt: <dataframe>
+dfs[0]:174x7
+Company Name,Gender,Youth,Intervention_Category,Intervention,Comments,Date
+Great Blooming,Female,Yes,New Venture Creation (Launch League),Book Club,,2024-11-28
+OM Coteries,Female,No,Other Custom Support,Leadership & Personal Development,Guidance to help incubate set-up domain registered emails ,2024-10-07
+Bokgabane,Male,Yes,Financial Mentotship,Tech Digital Skills,Pricing template to help guide pricing their products or services,2025-01-21
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ Show the first 5 rows of data in tabular form
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+2025-02-03 01:44:09 [INFO] Executing Step 3: CodeGenerator
+2025-02-03 01:44:11 [ERROR] Pipeline failed on step 3: 400 API Key not found. Please pass a valid API key. [reason: "API_KEY_INVALID"
+domain: "googleapis.com"
+metadata {
+  key: "service"
+  value: "generativelanguage.googleapis.com"
+}
+, locale: "en-US"
+message: "API Key not found. Please pass a valid API key."
+]
+2025-02-03 01:47:36 [INFO] Question: Show the first 5 rows of data in tabular form
+2025-02-03 01:47:36 [INFO] Running PandasAI with google-gemini LLM...
+2025-02-03 01:47:36 [INFO] Prompt ID: 2730d85f-d691-406b-b25a-b64e7a9d6c56
+2025-02-03 01:47:36 [INFO] Executing Pipeline: GenerateChatPipeline
+2025-02-03 01:47:36 [INFO] Executing Step 0: ValidatePipelineInput
+2025-02-03 01:47:36 [INFO] Executing Step 1: CacheLookup
+2025-02-03 01:47:36 [INFO] Executing Step 2: PromptGeneration
+2025-02-03 01:47:36 [INFO] Using prompt: <dataframe>
+dfs[0]:174x7
+Company Name,Gender,Youth,Intervention_Category,Intervention,Comments,Date
+OM Coteries,Female,Yes,Project Management,Ad Hoc Mentorship,,2024-09-23
+Agang Basadi,Male,No,Compliance Support,Digital Marketing,Guidance on employment contracts,2024-12-05
+Great Blooming,Female,No,Other Custom Support,Financial Literacy Training,Pricing template to help guide pricing their products or services,2024-11-28
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ Show the first 5 rows of data in tabular form
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+2025-02-03 01:47:36 [INFO] Executing Step 3: CodeGenerator
+2025-02-03 01:47:38 [ERROR] Pipeline failed on step 3: 400 API Key not found. Please pass a valid API key. [reason: "API_KEY_INVALID"
+domain: "googleapis.com"
+metadata {
+  key: "service"
+  value: "generativelanguage.googleapis.com"
+}
+, locale: "en-US"
+message: "API Key not found. Please pass a valid API key."
+]
+2025-02-03 16:25:03 [INFO] Question: 5
+2025-02-03 16:25:03 [INFO] Running PandasAI with google-gemini LLM...
+2025-02-03 16:25:03 [INFO] Prompt ID: 66af3d96-ec15-494a-8cfc-d5b044b19c3d
+2025-02-03 16:25:03 [INFO] Executing Pipeline: GenerateChatPipeline
+2025-02-03 16:25:03 [INFO] Executing Step 0: ValidatePipelineInput
+2025-02-03 16:25:03 [INFO] Executing Step 1: CacheLookup
+2025-02-03 16:25:03 [INFO] Executing Step 2: PromptGeneration
+2025-02-03 16:25:04 [INFO] Using prompt: <dataframe>
+dfs[0]:174x7
+Company Name,Gender,Youth,Intervention_Category,Intervention,Comments,Date
+Agang Basadi,Female,Yes,Business Development,Tax Training,,2024-11-17
+Jamlea,Male,No,Project Management,Company Logo,Modernised website,2024-11-28
+Bokgabane,Female,No,New Venture Creation (Launch League),Kick-off session,Guidance on data analytics on Quant,2025-01-29
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ 5
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+2025-02-03 16:25:04 [INFO] Executing Step 3: CodeGenerator
+2025-02-03 16:25:07 [INFO] Prompt used:
+            
+<dataframe>
+dfs[0]:174x7
+Company Name,Gender,Youth,Intervention_Category,Intervention,Comments,Date
+Agang Basadi,Female,Yes,Business Development,Tax Training,,2024-11-17
+Jamlea,Male,No,Project Management,Company Logo,Modernised website,2024-11-28
+Bokgabane,Female,No,New Venture Creation (Launch League),Kick-off session,Guidance on data analytics on Quant,2025-01-29
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ 5
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+            
+2025-02-03 16:25:07 [INFO] Code generated:
+            ```
+            # TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+result = { "type": "dataframe", "value": dfs[0].query("Youth == 'Yes' and Intervention_Category == 'Business Development'") }
+            ```
+            
+2025-02-03 16:25:07 [INFO] Executing Step 4: CachePopulation
+2025-02-03 16:25:07 [INFO] Executing Step 5: CodeCleaning
+2025-02-03 16:25:07 [INFO] 
+Code running:
+```
+result = {'type': 'dataframe', 'value': dfs[0].query("Youth == 'Yes' and Intervention_Category == 'Business Development'")}
+        ```
+2025-02-03 16:25:07 [INFO] Executing Step 6: CodeExecution
+2025-02-03 16:25:07 [INFO] Executing Step 7: ResultValidation
+2025-02-03 16:25:07 [INFO] Answer: {'type': 'dataframe', 'value':      Company Name  Gender Youth Intervention_Category           Intervention                          Comments       Date
+149   OM Coteries  Female   Yes  Business Development  Productivity Training  Phygital session on productivity 2025-01-21
+150     Bokgabane  Female   Yes  Business Development  Productivity Training  Phygital session on productivity 2025-01-21
+151  Nqoba Legacy    Male   Yes  Business Development  Productivity Training  Phygital session on productivity 2025-01-21}
+2025-02-03 16:25:07 [INFO] Executing Step 8: ResultParsing
+2025-02-03 16:25:07 [INFO] Question: 5 rows
+2025-02-03 16:25:07 [INFO] Running PandasAI with google-gemini LLM...
+2025-02-03 16:25:08 [INFO] Prompt ID: 2206b21e-40a7-490b-a7ef-a3b0a4f8fe44
+2025-02-03 16:25:08 [INFO] Executing Pipeline: GenerateChatPipeline
+2025-02-03 16:25:08 [INFO] Executing Step 0: ValidatePipelineInput
+2025-02-03 16:25:08 [INFO] Executing Step 1: CacheLookup
+2025-02-03 16:25:08 [INFO] Executing Step 2: PromptGeneration
+2025-02-03 16:25:08 [INFO] Using prompt: <dataframe>
+dfs[0]:174x7
+Company Name,Gender,Youth,Intervention_Category,Intervention,Comments,Date
+Nqoba Legacy,Female,Yes,Other Custom Support,Personal Development,,2024-12-17
+Great Blooming,Female,No,Business Development,Website,Thanks you letters template development and collection,2024-12-03
+Agang Basadi,Male,Yes,Compliance Support,Leadership & Personal Development,Financial literacy for SMMEs by Bond,2024-12-10
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ 5 rows
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+2025-02-03 16:25:08 [INFO] Executing Step 3: CodeGenerator
+2025-02-03 16:25:10 [INFO] Prompt used:
+            
+<dataframe>
+dfs[0]:174x7
+Company Name,Gender,Youth,Intervention_Category,Intervention,Comments,Date
+Nqoba Legacy,Female,Yes,Other Custom Support,Personal Development,,2024-12-17
+Great Blooming,Female,No,Business Development,Website,Thanks you letters template development and collection,2024-12-03
+Agang Basadi,Male,Yes,Compliance Support,Leadership & Personal Development,Financial literacy for SMMEs by Bond,2024-12-10
+</dataframe>
+
+
+
+
+Update this initial code:
+```python
+# TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+type (possible values "string", "number", "dataframe", "plot"). Examples: { "type": "string", "value": f"The highest salary is {highest_salary}." } or { "type": "number", "value": 125 } or { "type": "dataframe", "value": pd.DataFrame({...}) } or { "type": "plot", "value": "temp_chart.png" }
+
+```
+
+
+
+### QUERY
+ 5 rows
+
+Variable `dfs: list[pd.DataFrame]` is already declared.
+
+At the end, declare "result" variable as a dictionary of type and value.
+
+If you are asked to plot a chart, use "matplotlib" for charts, save as png.
+
+
+Generate python code and return full updated code:
+            
+2025-02-03 16:25:10 [INFO] Code generated:
+            ```
+            # TODO: import the required dependencies
+import pandas as pd
+
+# Write code here
+
+# Declare result var: 
+result = { "type": "dataframe", "value": dfs[0].query("Youth == 'Yes' and Intervention_Category == 'Other Custom Support'") }
+            ```
+            
+2025-02-03 16:25:10 [INFO] Executing Step 4: CachePopulation
+2025-02-03 16:25:10 [INFO] Executing Step 5: CodeCleaning
+2025-02-03 16:25:10 [INFO] 
+Code running:
+```
+result = {'type': 'dataframe', 'value': dfs[0].query("Youth == 'Yes' and Intervention_Category == 'Other Custom Support'")}
+        ```
+2025-02-03 16:25:10 [INFO] Executing Step 6: CodeExecution
+2025-02-03 16:25:10 [INFO] Executing Step 7: ResultValidation
+2025-02-03 16:25:10 [INFO] Answer: {'type': 'dataframe', 'value':      Company Name  Gender Youth Intervention_Category                 Intervention                                           Comments       Date
+162   OM Coteries  Female   Yes  Other Custom Support  Funding Application Support             SEDA asset assist applicvation support 2025-01-18
+164  Nqoba Legacy    Male   Yes  Other Custom Support             Pricing Template  Pricing template to help guide pricing their p... 2024-10-11
+165  Nqoba Legacy    Male   Yes  Other Custom Support            Ad Hoc Mentorship  Guidance to help incubate set-up domain regist... 2024-12-11
+166     Bokgabane  Female   Yes  Other Custom Support            Ad Hoc Mentorship                   Guidance on employment contracts 2025-01-29
+167     Bokgabane  Female   Yes  Other Custom Support            Ad Hoc Mentorship                Guidance on data analytics on Quant 2025-01-21}
+2025-02-03 16:25:10 [INFO] Executing Step 8: ResultParsing
