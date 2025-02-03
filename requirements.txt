@@ -5,8 +5,6 @@ streamlit-option-menu
 pandas==2.2.3
 pandasai==2.0.28
 phidata
-streamlit==1.32.2
-streamlit-on-Hover-tabs
 google-generativeai==0.4.1
 ydata-profiling
 numba==0.58.1
