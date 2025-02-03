@@ -1,7 +1,6 @@
 ﻿streamlit==1.41.1
 streamlit-authenticator==0.4.1
 streamlit-highcharts==0.2.0
-streamlit-extras
 streamlit-optiion-menu
 pandas==2.2.3
 numpy==2.2.1
