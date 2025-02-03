@@ -2,7 +2,7 @@
 streamlit-authenticator==0.4.1
 streamlit-highcharts==0.2.0
 streamlit-option-menu
-pandas==2.2.3
+pandas==1.4.0
 pandasai==2.0.28
 phidata
 google-generativeai==0.4.1
