@@ -29,8 +29,8 @@ class StreamLitResponse(ResponseParser):
 
 
 st.set_page_config(
-    page_title='Quantilytix-ESD AI Platform'
-    , page_icon='💻'
+    page_title='Quantilytix ESD AI Platform'
+    , page_icon='📈'
     , layout='wide'
 )
 
@@ -62,7 +62,7 @@ if not st.session_state.logged_in:
             st.error("Invalid username or password")
     st.stop()
 
-st.title(':red[Quantilytix Quantilytix-ESD AI] Platform')
+st.title(':red[Quantilytix ESD AI] Platform')
 
 options = option_menu(
     menu_title=None
