@@ -35,7 +35,7 @@ st.set_page_config(
 )
 
 # --- User Authentication ---
-users = {"info@epont.co.za": {"password": "admin123"}, "user": {"password": "user123"}}
+users = {"rudziratshitanga@gmail.com": {"password": "admin123"}, "user": {"password": "user123"}}
 
 
 def authenticate(username, password):
